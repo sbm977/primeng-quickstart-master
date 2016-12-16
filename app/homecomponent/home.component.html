@@ -1,0 +1,71 @@
+<div>
+    <p-dataTable [value]="cars" selectionMode="single" sortField="year" sortOrder="1"[(selection)]="selectedCar" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="10" [responsive]="true">
+        <header>CRUD for Cars</header>
+        <p-column field="vin" header="Vin" [sortable]="true"></p-column>
+        <p-column field="year" header="Year" [sortable]="true"></p-column>
+        <p-column field="brand" header="Brand" [sortable]="true"></p-column>
+        <p-column field="color" header="Color" [sortable]="true"></p-column>
+        <footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div></footer>
+    </p-dataTable>
+
+    <p-paginator rows="10" totalRecords="{{totalRecords}}" (onPageChange)="loadDataLazy($event)" [rowsPerPageOptions]="[10,20,30]"></p-paginator>
+    <p-dataTable [value]="datas" selectionMode="single" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" (onLazyLoad)="loadDataLazy($event)" [rows]="10" [responsive]="true">
+        <header>Data Loaded from REST Call</header>
+        <p-column field="s" header="s" [sortable]="true"></p-column>
+        <p-column field="md5" header="MD5" [sortable]="true"></p-column>
+        <p-column field="md1" header="MD1" [sortable]="true"></p-column>
+
+        <footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div></footer>
+    </p-dataTable>
+
+
+
+    <p-dialog header="Car Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+        <div class="ui-grid ui-grid-responsive ui-fluid ui-grid-pad" *ngIf="car">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-4"><label for="vin">Vin</label></div>
+                <div class="ui-grid-col-8"><input pInputText id="vin" [(ngModel)]="car.vin" /></div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-4"><label for="brand">Year</label></div>
+                <div class="ui-grid-col-8"><input pInputText id="brand" [(ngModel)]="car.year" /></div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-4"><label for="brand">Brand</label></div>
+                <div class="ui-grid-col-8"><input pInputText id="brand" [(ngModel)]="car.brand" /></div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-4"><label for="color">Color</label></div>
+                <div class="ui-grid-col-8"><input pInputText id="color" [(ngModel)]="car.color" /></div>
+            </div>
+        </div>
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton icon="fa-close" (click)="delete()" label="Delete"></button>
+                <button type="button" pButton icon="fa-check" (click)="save()" label="Save"></button>
+            </div>
+        </footer>
+    </p-dialog>
+</div>
+
+<div>
+    <h3>Advanced</h3>
+    <p-autoComplete [(ngModel)]="brand" [suggestions]="filteredBrands" (completeMethod)="filterBrands($event)" [size]="30"
+                    [minLength]="1" placeholder="Hint: type 'v' or 'f'" [dropdown]="true" (onDropdownClick)="handleDropdownClick($event)">
+        <span style="margin-left:50px">Brand: {{brand||'none'}}</span>
+        <template let-brand>
+            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+                <img src="app/showcase/resources/demo/images/car/{{brand}}.gif" style="width:32px;display:inline-block;margin:5px 0 2px 5px"/>
+                <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{brand}}</div>
+            </div>
+        </template>
+    </p-autoComplete>
+    <span style="margin-left:50px">Brand: {{brand||'none'}}</span>
+
+</div>
+
+<div>
+    <h3>Dropdown</h3>
+    <p-dropdown [options]="options" [(ngModel)]="selectedOptions" ></p-dropdown>
+    <button (click)="logmesaage()">log</button>
+</div>

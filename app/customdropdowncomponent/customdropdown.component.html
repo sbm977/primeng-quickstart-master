@@ -1,0 +1,41 @@
+
+<div [ngClass]="{'ui-dropdown ui-widget ui-state-default ui-corner-all ui-helper-clearfix':true,
+            'ui-state-hover':hover&&!disabled,'ui-state-focus':focus,'ui-state-disabled':disabled,'ui-dropdown-open':panelVisible}"
+     (mouseenter)="onMouseenter($event)" (mouseleave)="onMouseleave($event)" (click)="onMouseclick($event,in)" [ngStyle]="style" [class]="styleClass">
+    <div class="ui-helper-hidden-accessible">
+        <select [required]="required" tabindex="-1">
+            <option *ngFor="let option of options" [value]="option.value" [selected]="selectedOption == option">{{option.label}}</option>
+        </select>
+    </div>
+
+    <div class="ui-helper-hidden-accessible">
+        <input #in type="text" readonly (focus)="onInputFocus($event)" (blur)="onInputBlur($event)" (keydown)="onKeydown($event)">
+    </div>
+    <label [ngClass]="{'ui-dropdown-label ui-inputtext ui-corner-all':true,'ui-dropdown-label-empty':!label}" *ngIf="!editable">{{label||'empty'}}</label>
+    <input type="text" class="ui-dropdown-label ui-inputtext ui-corner-all" *ngIf="editable" [value]="label"
+           (click)="onEditableInputClick($event)" (input)="onEditableInputChange($event)" (focus)="onEditableInputFocus($event)" (blur)="onInputBlur($event)">
+    <div class="ui-dropdown-trigger ui-state-default ui-corner-right" [ngClass]="{'ui-state-hover':hover&&!disabled,'ui-state-focus':focus}">
+        <span class="fa fa-fw fa-caret-down ui-c"></span>
+    </div>
+    <div class="ui-dropdown-panel ui-widget-content ui-corner-all ui-helper-hidden ui-shadow"
+         [style.display]="panelVisible ? 'block' : 'none'">
+        <div *ngIf="filter" class="ui-dropdown-filter-container" (input)="onFilter($event)" (click)="$event.stopPropagation()">
+            <input type="text" autocomplete="off" class="ui-dropdown-filter ui-inputtext ui-widget ui-state-default ui-corner-all">
+            <span class="fa fa-search"></span>
+        </div>
+        <div class="ui-dropdown-items-wrapper" [style.max-height]="scrollHeight||'auto'">
+            <ul class="ui-dropdown-items ui-dropdown-list ui-widget-content ui-widget ui-corner-all ui-helper-reset">
+                <li #item *ngFor="let option of optionsToDisplay;let i=index"
+                    [ngClass]="{'ui-dropdown-item ui-corner-all':true, 'ui-state-hover':hoveredItem == item,'ui-state-highlight':(selectedOption == option)}"
+                    (click)="onItemClick($event, option)" (mouseenter)="hoveredItem=item" (mouseleave)="hoveredItem=null">
+                    <span *ngIf="!itemTemplate">{{option.label}}</span>
+                    <template [pTemplateWrapper]="itemTemplate" [item]="option" *ngIf="itemTemplate"></template>
+
+                </li>
+
+
+            </ul>
+        </div>
+       </div>
+</div>
+
